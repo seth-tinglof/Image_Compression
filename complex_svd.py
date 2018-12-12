@@ -3,7 +3,7 @@ from PIL import Image
 
 FILENAME = "4.2.03.png"
 RANK_APPROXIMATIONS = [1, 2, 3, 4, 5]
-BLOCK = (20, 20)
+BLOCK = (25, 25)
 
 
 image_original = np.array(Image.open(FILENAME).convert("RGB"))
@@ -23,5 +23,7 @@ for approx in RANK_APPROXIMATIONS:
         for j in range(3):
             u, s, v = block_svds[i][j]
             u, s, v = u.astype('float16'), s.astype('float16'), v.astype('float16') # correctly simulate 16bit precision
-            image[x:x+BLOCK[0], y:y+BLOCK[1], j] = np.dot(u[:, :approx] * s[:approx], v[:approx, :])
+            temp = np.dot(u[:, :approx] * s[:approx], v[:approx, :])
+            temp[temp < 0] = 0
+            image[x:x+BLOCK[0], y:y+BLOCK[1], j] = temp
     Image.fromarray(image).save("output/complex_svd/rank_%d_block_%d_approx.png" % (approx, BLOCK[0]))

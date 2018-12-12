@@ -15,5 +15,7 @@ for approx in RANK_APPROXIMATIONS:
     for i in range(3):
         u, s, v = channels[i]
         u, s, v = u.astype('float16'), s.astype('float16'), v.astype('float16') # correctly simulate 16bit precision
-        image[:, :, i] = np.dot(u[:, :approx] * s[:approx], v[:approx, :])
+        temp = np.dot(u[:, :approx] * s[:approx], v[:approx, :])
+        temp[temp < 0] = 0
+        image[:, :, i] = temp
     Image.fromarray(image).save("output/simple_svd/rank_%d_approx.png" % approx)
