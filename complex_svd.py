@@ -25,5 +25,6 @@ for approx in RANK_APPROXIMATIONS:
             u, s, v = u.astype('float16'), s.astype('float16'), v.astype('float16') # correctly simulate 16bit precision
             temp = np.dot(u[:, :approx] * s[:approx], v[:approx, :])
             temp[temp < 0] = 0
+            temp[temp > 255] = 255
             image[x:x+BLOCK[0], y:y+BLOCK[1], j] = temp
     Image.fromarray(image).save("output/complex_svd/rank_%d_block_%d_approx.png" % (approx, BLOCK[0]))
