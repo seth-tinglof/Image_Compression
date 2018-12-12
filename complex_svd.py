@@ -3,7 +3,7 @@ from PIL import Image
 
 FILENAME = "4.2.03.png"
 RANK_APPROXIMATIONS = [1, 2, 3, 4, 5]
-BLOCK = (20, 10)
+BLOCK = (20, 20)
 
 
 image_original = np.array(Image.open(FILENAME).convert("RGB"))
